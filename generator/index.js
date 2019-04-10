@@ -1,41 +1,35 @@
-let ui5 = `\nVue.config.ignoredElements = [/^ui5-/];`;
+let ui5 = "\nVue.config.ignoredElements = [/^ui5-/];";
 
-module.exports = (api, opts, rootOptions) => {
+module.exports = (api, options, rootOptions) => {
     api.extendPackage({
         dependencies: {
             "@ui5/webcomponents": "^0.9.0"
         }
     });
-    if (opts.addExample) {
-        api.render('./template', {
-            ...opts,
+    if (options.addExample) {
+        api.render("./template", {
+            ...options
         });
     }
     api.onCreateComplete(() => {
         // inject to main.js
-        const fs = require('fs');
-        const ext = api.hasPlugin('typescript') ?
-            'ts' :
-            'js';
+        const fs = require("fs");
+        const ext = api.hasPlugin("typescript")
+            ? "ts"
+            : "js";
         const mainPath = api.resolve(`./src/main.${ext}`);
-        // get content
-        let contentMain = fs.readFileSync(mainPath, {
-            encoding: 'utf-8'
-        });
+        let contentMain = fs.readFileSync(mainPath, {encoding: "utf-8"});
         const lines = contentMain
             .split(/\r?\n/g)
             .reverse();
 
-        // inject import
         const lastImportIndex = lines.findIndex(line => line.match(/^import/));
         lines[lastImportIndex] += ui5;
 
-        // modify app
         contentMain = lines
             .reverse()
-            .join('\n');
-        fs.writeFileSync(mainPath, contentMain, {
-            encoding: 'utf-8'
-        });
+            .join("\n");
+        fs.writeFileSync(mainPath, contentMain, {encoding: "utf-8"});
+        api.exitLog("Successfully installed UI5 Web Components", "done");
     });
-}
+};
