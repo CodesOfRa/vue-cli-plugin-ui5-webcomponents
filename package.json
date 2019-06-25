@@ -1,7 +1,7 @@
 {
   "name": "vue-cli-plugin-ui5-webcomponents",
   "version": "0.0.2",
-  "description": "",
+  "description": "Vue-cli 3 plugin for adding UI5 Web Componentsx",
   "main": "index.js",
   "repository": {
     "type": "git",
